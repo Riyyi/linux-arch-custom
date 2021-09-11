@@ -21,6 +21,27 @@ if [ "$(dirname "$0")" != "." ]; then
 	exit 1
 fi
 
+help()
+{
+	cat << EOF
+${b}NAME${n}
+	kernel.sh - build the Linux kernel
+
+${b}SYNOPSIS${n}
+	${u}kernel.sh${n} [${u}OPTION${n}] ${u}COMMAND${n}
+
+${b}OPTIONS${n}
+	${b}-h${n}, ${b}--help${n}	Display usage message and exit.
+
+${b}COMMANDS${n}
+	${b}build${n}
+		Build the kernel, this is the default.
+
+	${b}install${n}
+		Install the kernel.
+EOF
+}
+
 # Main functionality
 # --------------------------------------
 
@@ -102,6 +123,9 @@ checkDependencies
 
 script="$(basename "$0")"
 case "$1" in
+	-h | --help)
+		help
+		;;
 	build | "")
 		build
 		;;
