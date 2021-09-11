@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: GPL-2.0-only
 #
 # Build the Linux kernel
-# Depends: asp, base-devel
+# Depends: asp, base-devel, coreutils
 
 # Setup
 # --------------------------------------
@@ -37,6 +37,7 @@ checkDependencies()
 	dependencies="
 		asp
 		base-devel
+		coreutils
 	"
 
 	for dependency in $dependencies; do
@@ -74,8 +75,42 @@ build()
 	time makepkg -s
 }
 
+install()
+{
+	cdSafe build
+
+	packages="$(find . -name "*.tar.zst" -type f)"
+
+	found="$(echo "$packages" | wc -l)"
+	if [ "$found" -ne 2 ]; then
+		echo "${b}${red}Error:${n} kernel was not build yet." >&2
+		exit 1
+	fi
+
+	if ! sudo -v; then
+		echo "${b}${red}Error:${n} you cannot perform this operation uness you are root." >&2
+		exit 1
+	fi
+
+	echo "$packages" | xargs --open-tty sudo pacman -U --needed
+}
+
 # Execute
 # --------------------------------------
 
 checkDependencies
-build
+
+script="$(basename "$0")"
+case "$1" in
+	build | "")
+		build
+		;;
+	install)
+		install
+		;;
+	*)
+		echo "$script: invalid option '$1'" >&2
+		echo "Try '$script -h' for more information." >&2
+		exit 1
+		;;
+esac

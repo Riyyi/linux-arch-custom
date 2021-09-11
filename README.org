@@ -8,6 +8,12 @@ Disables incomplete reports in ~i2c-hid-code.c~ to stop logging spam.
 * Build instructions
 
 #+BEGIN_SRC sh
-  $ mkdir build
-  $ ./kernel.sh
+$ mkdir build
+$ ./kernel.sh
+#+END_SRC
+
+* Install
+
+#+BEGIN_SRC sh
+$ ./kernel.sh install
 #+END_SRC
