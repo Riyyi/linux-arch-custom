@@ -53,6 +53,14 @@ cdSafe()
 	fi
 }
 
+fileExist()
+{
+	if [ ! -f "$1" ] ; then
+		echo "${b}${red}Error:${n} no such file or directory: $1" >&2
+		exit 1
+	fi
+}
+
 checkDependencies()
 {
 	dependencies="
@@ -76,14 +84,14 @@ build()
 	rm -rf "./linux"
 	asp update linux
 	asp export linux
-	[ -f linux/config ] && mv linux/config .
-	[ -f linux/PKGBUILD ] && mv linux/PKGBUILD .
+	fileExist linux/config && mv linux/config .
+	fileExist linux/PKGBUILD && mv linux/PKGBUILD .
 	rm -rf "./linux"
 
 	patch --forward --strip=1 config < ../patch/config.patch
 	patch --forward --strip=1 PKGBUILD < ../patch/pkgbuild.patch
 
-	ln -s ../patch/i2c-hid-disable-incomplete-reports.patch .
+	ln -s ../patch/i2c-hid-disable-incomplete-reports.patch . 2> /dev/null
 
 	updpkgsums
 
