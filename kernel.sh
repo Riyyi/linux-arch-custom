@@ -16,9 +16,14 @@ blue="$(tput setf 1)"
 red="$(tput setf 4)"
 n="$(tput sgr0)"
 
-if [ "$(dirname "$0")" != "." ]; then
-	echo "${b}${red}Error:${n} please run this script from the directory it resides." >&2
+error()
+{
+	echo "${b}${red}Error:${n} $1" >&2
 	exit 1
+}
+
+if [ "$(dirname "$0")" != "." ]; then
+	error "please run this script from the directory it resides."
 fi
 
 help()
@@ -48,16 +53,14 @@ EOF
 cdSafe()
 {
 	if ! cd "$1" 2> /dev/null; then
-		echo "${b}${red}Error:${n} no such file or directory: $1" >&2
-		exit 1
+		error "no such file or directory: $1"
 	fi
 }
 
 fileExist()
 {
 	if [ ! -f "$1" ] ; then
-		echo "${b}${red}Error:${n} no such file or directory: $1" >&2
-		exit 1
+		error "no such file or directory: $1"
 	fi
 }
 
@@ -71,8 +74,7 @@ checkDependencies()
 
 	for dependency in $dependencies; do
 		if ! pacman -Qs "$dependency" > /dev/null; then
-			echo "${b}${red}Error:${n} required dependency '$dependency' is missing." >&2
-			exit 1
+			error "required dependency '$dependency' is missing."
 		fi
 	done
 }
@@ -112,13 +114,11 @@ install()
 
 	found="$(echo "$packages" | wc -l)"
 	if [ "$found" -ne 2 ]; then
-		echo "${b}${red}Error:${n} kernel was not build yet." >&2
-		exit 1
+		error "kernel was not build yet."
 	fi
 
 	if ! sudo -v; then
-		echo "${b}${red}Error:${n} you cannot perform this operation uness you are root." >&2
-		exit 1
+		error "you cannot perform this operation uness you are root."
 	fi
 
 	echo "$packages" | xargs --open-tty sudo pacman -U --needed
