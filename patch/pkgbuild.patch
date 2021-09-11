@@ -1,0 +1,46 @@
+diff --git a/PKGBUILD b/PKGBUILD
+index 4a4a8e3..bd2d8e7 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -1,6 +1,6 @@
+-# Maintainer: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
++# Maintainer: Jan Alexander Steffens (heftig) <heftig@archlinux.org>  -*- shell-script -*-
+ 
+-pkgbase=linux
++pkgbase=linux-custom
+ pkgver=5.14.2.arch1
+ pkgrel=2
+ pkgdesc='Linux'
+@@ -14,10 +14,11 @@ makedepends=(
+   git
+ )
+ options=('!strip')
+-_srcname=archlinux-linux
++_srcname=linux-${pkgver%.*}
+ source=(
+-  "$_srcname::git+https://github.com/archlinux/linux?signed#tag=$_srctag"
++  "https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-${pkgver%.*}.tar.xz"
+   config         # the main kernel config file
++  i2c-hid-disable-incomplete-reports.patch
+ )
+ validpgpkeys=(
+   'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
+@@ -59,8 +60,7 @@ prepare() {
+ 
+ build() {
+   cd $_srcname
+-  make all
+-  make htmldocs
++  make -j"$(nproc)" all
+ }
+ 
+ _package() {
+@@ -191,7 +191,7 @@ _package-docs() {
+   ln -sr "$builddir/Documentation" "$pkgdir/usr/share/doc/$pkgbase"
+ }
+ 
+-pkgname=("$pkgbase" "$pkgbase-headers" "$pkgbase-docs")
++pkgname=("$pkgbase" "$pkgbase-headers")
+ for _p in "${pkgname[@]}"; do
+   eval "package_$_p() {
+     $(declare -f "_package${_p#$pkgbase}")

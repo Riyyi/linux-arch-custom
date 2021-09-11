@@ -1,0 +1,11 @@
+* linux-arch-custom
+
+Customized Arch Linux kernel, aimed at minimal Intel systems.
+Disables incomplete reports in ~i2c-hid-code.c~ to stop logging spam.
+
+* Build instructions
+
+#+BEGIN_SRC sh
+  $ mkdir build
+  $ ./kernel.sh
+#+END_SRC

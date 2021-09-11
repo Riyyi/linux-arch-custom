@@ -1,0 +1,16 @@
+diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-hid/i2c-hid-core.c
+index 46474612e73c..eb1b7d5cac65 100644
+--- a/drivers/hid/i2c-hid/i2c-hid-core.c
++++ b/drivers/hid/i2c-hid/i2c-hid-core.c
+@@ -515,8 +515,8 @@ static void i2c_hid_get_input(struct i2c_hid *ihid)
+ 			ihid->inbuf[1] = size >> 8;
+ 			ret_size = size;
+ 		} else {
+-			dev_err(&ihid->client->dev, "%s: incomplete report (%d/%d)\n",
+-				__func__, size, ret_size);
++			/* dev_err(&ihid->client->dev, "%s: incomplete report (%d/%d)\n",
++				__func__, size, ret_size); */
+ 			return;
+ 		}
+ 	}
+
