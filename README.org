@@ -1,6 +1,8 @@
+#+OPTIONS: toc:nil
+
 * linux-arch-custom
 
-Customized Arch Linux kernel, aimed at minimal Intel systems.
+Customized Arch Linux kernel, aimed at minimal Intel systems. \\
 Disables incomplete reports in ~i2c-hid-code.c~ to stop logging spam.
 
 * Build instructions
